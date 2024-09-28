@@ -1,26 +1,24 @@
-
+import React from "react";
 import MainSection from "./MainSection";
 import Form from "./Form";
 
 function ServiceList({
   Lists,
   onDelete,
-  onUpdate,
   isEditing,
   onEdit,
   onAddService,
-  updateList,  // Receiving the service being edited
+  updateList,
+  stopEditing,
 }) {
-  // Default message when there are no services
   let content = (
     <center>
       <h1>No service list</h1>
     </center>
   );
 
-  // Function to handle the "Update" button click
   function handleUpdate(list) {
-    onEdit(list);  // Pass the selected service to the parent onEdit function
+    onEdit(list);
   }
 
   if (Lists.length > 0) {
@@ -28,7 +26,8 @@ function ServiceList({
       <Form
         onEdit={onEdit}
         onsubmit={onAddService}
-        data={updateList}  // Pass the selected service data for editing
+        data={updateList}
+        onCancel={stopEditing}
       />
     ) : (
       <ul className="service-lists">
@@ -62,6 +61,16 @@ function ServiceList({
           );
         })}
       </ul>
+    );
+  } else if (isEditing) {
+    // If the list is empty and editing mode is active, show the form
+    content = (
+      <Form
+        onEdit={onEdit}
+        onsubmit={onAddService}
+        data={updateList}
+        onCancel={stopEditing}
+      />
     );
   }
 
