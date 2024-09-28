@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+
 import MainSection from "./MainSection";
 import Form from "./Form";
+
 function ServiceList({
   Lists,
   onDelete,
@@ -8,34 +9,32 @@ function ServiceList({
   isEditing,
   onEdit,
   onAddService,
+  updateList,  // Receiving the service being edited
 }) {
-  const [updateList, setUpdateList] = useState(undefined);
-
+  // Default message when there are no services
   let content = (
     <center>
-      <h1>No service list </h1>
+      <h1>No service list</h1>
     </center>
   );
 
+  // Function to handle the "Update" button click
   function handleUpdate(list) {
-    setUpdateList(list);
-    onEdit();
+    onEdit(list);  // Pass the selected service to the parent onEdit function
   }
+
   if (Lists.length > 0) {
     content = isEditing ? (
-      updateList !== undefined ? (
-        (content = (
-          <Form onEdit={onEdit} onsubmit={onAddService} data={updateList} />
-        ))
-      ) : (
-        <Form onEdit={onEdit} onsubmit={onAddService} />
-      )
+      <Form
+        onEdit={onEdit}
+        onsubmit={onAddService}
+        data={updateList}  // Pass the selected service data for editing
+      />
     ) : (
       <ul className="service-lists">
         {Lists.map((list) => {
           const local = navigator.language;
           let calculatedPrice = new Intl.NumberFormat(local, {
-            // format the price
             style: "currency",
             currency: "INR",
           }).format(list.price);
@@ -65,6 +64,7 @@ function ServiceList({
       </ul>
     );
   }
+
   return (
     <div className="mainContainer">
       <MainSection />

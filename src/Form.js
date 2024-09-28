@@ -1,58 +1,66 @@
 import React, { useState, useEffect } from "react";
 
 function Form({ onEdit, onsubmit, data }) {
+  // Initialize form state
   const [inputData, setInputData] = useState({
-    name: '',
-    description: '',
-    price: ''
-  });
-  
-  const [error, setError] = useState({
-    name: '',
-    description: '',
-    price: ''
+    name: "",
+    description: "",
+    price: "",
   });
 
-  // Prepopulate form if 'data' prop is provided
+  const [error, setError] = useState({
+    name: "",
+    description: "",
+    price: "",
+  });
+
+  // Prepopulate form if 'data' is provided (edit mode), otherwise reset for add mode
   useEffect(() => {
     if (data) {
       setInputData({
-        name: data.name || '',
-        description: data.description || '',
-        price: data.price || ''
+        name: data.name || "",
+        description: data.description || "",
+        price: data.price || "",
+      });
+    } else {
+      // Reset form fields when switching to "add" mode
+      setInputData({
+        name: "",
+        description: "",
+        price: "",
       });
     }
   }, [data]);
 
-  // Handle input change for all form fields
+  // Handle input change for form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear the error message as soon as the user types
     setError((prev) => ({
       ...prev,
-      [name]: ''  // Clear error for that specific field
+      [name]: "",
     }));
   };
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const newErrors = {};
 
     if (!inputData.name) {
-      newErrors.name = 'Please enter a valid service name.';
+      newErrors.name = "Please enter a valid service name.";
     }
     if (!inputData.description) {
-      newErrors.description = 'Please enter a valid description.';
+      newErrors.description = "Please enter a valid description.";
     }
     if (!inputData.price) {
-      newErrors.price = 'Please enter a valid price.';
+      newErrors.price = "Please enter a valid price.";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -72,7 +80,7 @@ function Form({ onEdit, onsubmit, data }) {
         onChange={handleChange}
         value={inputData.name}
       />
-      {error.name && <span style={{ color: 'red' }}>{error.name}</span>}
+      {error.name && <span style={{ color: "red" }}>{error.name}</span>}
       <br /><br />
 
       <label htmlFor="serviceDescription">Service Description:</label>
@@ -84,7 +92,9 @@ function Form({ onEdit, onsubmit, data }) {
         onChange={handleChange}
         value={inputData.description}
       ></textarea>
-      {error.description && <span style={{ color: 'red' }}>{error.description}</span>}
+      {error.description && (
+        <span style={{ color: "red" }}>{error.description}</span>
+      )}
       <br /><br />
 
       <label htmlFor="servicePrice">Service Price:</label>
@@ -96,15 +106,20 @@ function Form({ onEdit, onsubmit, data }) {
         onChange={handleChange}
         value={inputData.price}
       />
-      {error.price && <span style={{ color: 'red' }}>{error.price}</span>}
+      {error.price && <span style={{ color: "red" }}>{error.price}</span>}
       <br /><br />
 
       <div className="form-control-container">
-        <button type="submit" className="List-button">Submit</button>
+        <button type="submit" className="List-button">
+          Submit
+        </button>
         <button
           type="button"
           className="List-button cancel"
-          onClick={(e) => { e.preventDefault(); onEdit(); }}
+          onClick={(e) => {
+            e.preventDefault();
+            onEdit();
+          }}
         >
           Cancel
         </button>
